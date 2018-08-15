@@ -2,12 +2,14 @@
 
 # Installing Ubuntu on ASUS T100 TA
 
-As of August 2018. (20180802)
+As of August 2018. (20180815)
 
 John Brodie said
 > The problem with step by step guides. The information is only accurate for up to a few months.
 
 Follow this guide with a grain of salt. Check if something is working before trying to repair it. After fixing it, verify if it is *really* working.
+
+Most importantly, **backup your data**. You already do it monthly, don't you?
 
 ### Resources
 - Asus T100 Ubuntu group. Ask your questions here! https://plus.google.com/communities/117853703024346186936
@@ -25,6 +27,8 @@ Download the ISO file you prefer. I personally like Xubuntu for its lightweight,
 - Ubuntu: https://www.ubuntu.com/download/desktop
 - Xubuntu: https://xubuntu.org/download
 - Other torrents: http://torrent.ubuntu.com/
+
+Note: Download the *64 bit version*. 32 bit versions may fail to boot.
 
 ### 2. Flash the installation media
 Flash the installation media. We will need to write on it afterwards, so do not use `dd` or *DD mode*.
@@ -51,6 +55,14 @@ Once Rufus has finished to flash the media:
 If, like jfwells, you would like to build `bootia32.efi` by yourself, follow his guide (primarily for Linux Ubuntu and other Linux Debian-derivatives): https://github.com/jfwells/linux-asus-t100ta/tree/master/boot
 
 ### 4. Boot
+
+#### Disable Secure Boot
+- Power on your ASUS T100
+- Press repetitively the *F2* button at boot to prompt the UEFI menu, namely *Setup Utility*
+- Go to the tab `Security`, then `Secure Boot menu`
+- Make sure `Secure Boot Support` is `[Disabled]`
+
+#### Boot the installation medium
 It is time to boot the installation medium!
 
 - Power on your ASUS T100
@@ -71,40 +83,40 @@ https://tutorials.ubuntu.com/tutorial/tutorial-install-ubuntu-desktop#4
 For more advanced users, choose the last installation type: *Something else*.
 
 ### 5. Partitioning
-2 scenarios: keep Windows or ditch Windows.
-
 The changes done in this section are not effectively written on the disk.
 The actual partitioning will happen when we'll run the installation. Therefore, you can go back at any time and try again.
 
-Note: ESP's filesystem is displayed as `ext4` in ubiquity when partitioning, before install. This is a display bug. The ESP is a VFAT partition.
+Note: A new ESP's filesystem is displayed as `ext4` in ubiquity when partitioning, before install. This is a display bug. The ESP is a VFAT or FAT32 partition.
 
 ESP stands for EFI System Partition.
 
-#### Keep Windows
-- You should have already shrunk Windows's partition in Windows (Disks)
-  * https://technet.microsoft.com/en-us/library/gg309169.aspx
-- Select the *Free Space*
-- Press the `+` button to add a new partition
-  * *Mountpoint* dropdown-menu: `/`
-  * OK
+Note: Ignore the device with a single partition of 8014 MB, namely `/dev/mmcblk0`.
 
-#### Ditch Windows
-- Select the first line: `/dev/mmcblk2` (your device might be named differently!)
-- New Partition table
-- Select the *Free Space*
-- Press the `+` button to add a new partition
-  * Size: 100 MB (50 MB is enough, ubiquity requires 35 MB)
-  * Use as: EFI system partition
+#### Make up space for Ubuntu
+2 scenarios: keep Windows or ditch Windows.
+
+##### Keep Windows
+- You should have already shrunk Windows's partition in Windows (Disks)
+  * Windows 7: https://technet.microsoft.com/en-us/library/gg309169.aspx
+  * Windows 10: https://docs.microsoft.com/en-us/windows-server/storage/disk-management/shrink-a-basic-volume#BKMK_WINUI
+
+##### Ditch Windows
+- Delete each partition, except the ESP. The ESP is probably one of the first partition, its size is 100 MB, and may be labeled `SYSTEM`.
+  * Select the partition you want to delete
+  * Press the `-` button to delete it.
+
+Note: Alternatively, if you know what you are doing, you can create a new partition table and a new ESP. Backup the old ESP, just in case.
+
+#### Create the partition for Ubuntu
 - Select the *Free Space*
 - Press the `+` button to add a new partition
   * Size: the rest (this is the default)
   * Use as: ext4 journaling file system
-  * Mountpoint: `/`
-
-Note: If you want to keep the current EFI system partition, delete the other partitions instead of creating a new partition table.
+  * *Mountpoint* dropdown-menu: `/`
+  * OK
 
 ### 6. Installation
-- Make sure 'Device for bootloader installation' is `/dev/mmcblk2`
+- Make sure 'Device for bootloader installation' is the right device, probably `/dev/mmcblk2`
 - *Install now*
 - ...Installation...
 - When finished, *Continue testing*
@@ -246,3 +258,13 @@ EndSection
 ### 13. Disable numlock at boot
 - Numlock is especially annoying in the login screen, when typing the password...since we do not see the actual characters.
   * `apt remove numlockx`
+
+# History
+
+##### 20180815
+* Use 64 bit ISOs
+* Disable Secure Boot
+* Keep the ESP instead of wiping it
+
+##### 20180802
+First version
