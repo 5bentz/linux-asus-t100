@@ -129,7 +129,8 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 ### 7. Install bootloader
 
 #### Enable WiFi
-/!\ Theses filenames are for T100TA only. Other T100's (T100CHI, etc) has other brcmfmac numbers
+/!\ Theses filenames are for T100TA and T100CHI only. Other T100's (T100TAF and 100H\*) have other brcmfmac numbers. See the troubleshooting section *No WiFi* at the end of this document.
+
 - `cp /sys/firmware/efi/efivars/nvram-* /lib/firmware/brcm/brcmfmac43241b4-sdio.txt` #useful now
 - `cp /sys/firmware/efi/efivars/nvram-* /target/lib/firmware/brcm/brcmfmac43241b4-sdio.txt` #useful after reboot
 - `modprobe -r brcmfmac`
@@ -265,6 +266,15 @@ EndSection
   * `apt remove numlockx`
 
 ## Troubleshooting
+
+### 1. No WiFi
+We have to find out which file your system needs.
+- Run dmesg
+ * `sudo dmesg`
+- Find the following line, ignore the `...`
+  * `brcmfmac ...: Direct firmware load for brcm/brcmfmacVWXYZ-sdio.bin for chip ...`
+- For example, a T100TAF needs `brcmfmac43340-sdio.txt`.
+- You can download it on the ASUS group: https://drive.google.com/drive/folders/0B4s5KNXf2Z36cUpzSURqaTk1TE0
 
 # History
 
