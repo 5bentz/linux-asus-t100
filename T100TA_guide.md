@@ -265,6 +265,16 @@ EndSection
 - Numlock is especially annoying in the login screen, when typing the password...since we do not see the actual characters.
   * `apt remove numlockx`
 
+### 14. Bluetooth
+/!\ Same warning as Sound and WiFi, the following file is for T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) have other Bluetooth device numbers.
+
+Bluetooth should already partially work. For a better support, e.g. *bonding*, we need `BCM4324B3.hcd` firmware file in the folder `/lib/firmware/brcm/`.
+- This file can be found in Windows partition, in the folder `C:\Windows\system32\drivers`.
+- Or, download it from: https://launchpad.net/asust100-ubuntu/+milestone/bluetooth-t100ta
+- Install it
+  * `mv BCM4324B3.hcd /lib/firmware/brcm/`
+- Reboot.
+
 ## Troubleshooting
 
 ### 1. No WiFi
