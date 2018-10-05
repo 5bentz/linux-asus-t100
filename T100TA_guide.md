@@ -74,13 +74,18 @@ It is time to boot the installation medium!
   * or `numlockx off` in a terminal
 - Optionally, change your keyboard layout
   * `setxkbmap countryCode` (*de* for German, *fr* for French, etc)
-- In a terminal, run `ubiquity -b` # Does not install a bootloader (Thanks Steven Andrew Mielke!)
 
-For novice users, follow Ubuntu's tutorial. But do **not reboot** at the end of the installation. Press the button *Continue testing* instead.
-https://tutorials.ubuntu.com/tutorial/tutorial-install-ubuntu-desktop#4
+#### Run the installer
+- In a terminal, run `ubiquity -b`
+
+Note: The flag `-b` is *necessary* in this tutorial. It tells ubiquity not to install a bootloader. Without this flag, ubiquity would crash when trying to install it (Thanks Steven Andrew Mielke!). The bootloader is installed in the section *Install bootloader* below.
+
+#### For novice users
+For novice users, follow [Ubuntu's tutorial](https://tutorials.ubuntu.com/tutorial/tutorial-install-ubuntu-desktop#4). But do **not reboot** at the end of the installation. Press the button *Continue testing* instead.
  When you are done with Ubuntu's tutorial, jump to the section *Install bootloader* in this document.
 
-For more advanced users, choose the last installation type: *Something else*.
+#### For more advanced users
+For more advanced users, choose the last installation type: *Something else*. And jump to the next section *Partitioning*.
 
 ### 5. Partitioning
 The changes done in this section are not effectively written on the disk.
