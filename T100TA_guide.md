@@ -207,8 +207,8 @@ GRUB_TIMEOUT=1
 - Before the reboot
   * `umount /target/boot/efi`
 
-### 10. Sound (T100TA)
-/!\ T100TA only. Other T100's (T100CHI, etc) has other audio device numbers
+### 10. Sound
+/!\ T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) has other audio device numbers. You may find files for your device on the [Asus T100 group drive](https://drive.google.com/drive/folders/0B4s5KNXf2Z36VVJDQnY5NEltdmc?tid=0B9C1WK1FQhjfcXNrbzN6djQzajg).
 - Download the following folder
   * https://drive.google.com/drive/folders/0B4DiU2o72FbuOXdwRXhfZ3ZmOFE?tid=0B9C1WK1FQhjfcXNrbzN6djQzajg
 - Extract it and enter the folder
@@ -241,6 +241,8 @@ If you have no sound, make sure Pulseaudio is correctly set:
   * Output device
     * Port: Headphones or speaker playback
 - You are good!
+
+If you still have no sound, see the troubleshooting section *No Sound* at the end of this document.
 
 ### 11. Backlit control
 Use xbacklight. Working for kernel >= 4.13 (Ubuntu 1804 has 4.15)
@@ -285,6 +287,21 @@ We have to find out which file your system needs.
   * `brcmfmac ...: Direct firmware load for brcm/brcmfmacVWXYZ-sdio.bin for chip ...`
 - For example, a T100TAF needs `brcmfmac43340-sdio.txt`.
 - You can download it on the ASUS group: https://drive.google.com/drive/folders/0B4s5KNXf2Z36cUpzSURqaTk1TE0
+
+### 2. No Sound
+
+#### Solution A: Turn `realtime-scheduling` off for pulseaudio
+For any software, the rule of thumb is to override the configuration by creating a new .conf file in `/etc/software/directory.conf.d/` instead. In this way, the system won't complain during an upgrade of the configuration file (Here `daemon.conf` for pulseaudio).
+
+- Obtain superuser privilege (root)
+  * `sudo -s`
+- Create a new directory for our configuration file
+  * `mkdir -p /etc/pulse/daemon.conf.d/`
+- Create the configuration file
+  * `echo 'realtime-scheduling = no' > /etc/pulse/daemon.conf.d/50-fix_pulseaudio.conf`
+  * You can change the name of the file, provided you keep the .conf extension though.
+- For more information
+  * `man pulse-daemon.conf`
 
 # History
 
