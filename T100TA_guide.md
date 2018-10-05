@@ -127,6 +127,9 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 - When finished, *Continue testing*
 
 ### 7. Install bootloader
+- From now onward, we will run the commands as root. To obtain superuser privileges, execute
+ * `sudo -s`.
+- Do *not* use `sudo` for each command, since it fails with some commands (`for` and `>`).
 
 #### Enable WiFi
 /!\ Theses filenames are for T100TA and T100CHI only. Other T100's (T100TAF and 100H\*) have other brcmfmac numbers. See the troubleshooting section *No WiFi* at the end of this document.
