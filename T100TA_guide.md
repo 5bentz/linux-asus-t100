@@ -264,6 +264,8 @@ EndSection
 - Numlock is especially annoying in the login screen, when typing the password...since we do not see the actual characters.
   * `apt remove numlockx`
 
+## Troubleshooting
+
 # History
 
 ##### 20180815
