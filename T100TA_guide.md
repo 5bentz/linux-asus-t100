@@ -2,7 +2,7 @@
 
 # Installing Ubuntu on ASUS T100 TA
 
-As of August 2018. (20180815)
+As of October 2018. (20181007)
 
 John Brodie said
 > The problem with step by step guides. The information is only accurate for up to a few months.
@@ -307,6 +307,11 @@ For any software, the rule of thumb is to override the configuration by creating
   * `man pulse-daemon.conf`
 
 # History
+
+##### 20181007
+* Advise to become root instead of using `sudo`
+* Add a *Bluetooth* section
+* Add a *Troubleshooting* chapter with 2 sections: *No WiFi* and *No Sound*
 
 ##### 20180815
 * Use 64 bit ISOs
