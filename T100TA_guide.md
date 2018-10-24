@@ -11,6 +11,9 @@ Follow this guide with a grain of salt. Check if something is working before try
 
 Most importantly, **backup your data**. You already do it monthly, don't you?
 
+### Source repository
+Contribute to the guide here: https://github.com/5bentz/linux-asus-t100
+
 ### Resources
 - Asus T100 Ubuntu group. Ask your questions here! https://plus.google.com/communities/117853703024346186936
 - Various tutorials with screenshots https://tutorials.ubuntu.com/tutorial/
