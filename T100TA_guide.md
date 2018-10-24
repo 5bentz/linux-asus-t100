@@ -2,7 +2,7 @@
 
 # Installing Ubuntu on ASUS T100 TA
 
-As of October 2018. (20181007)
+As of October 2018. (20181024)
 
 John Brodie said
 > The problem with step by step guides. The information is only accurate for up to a few months.
@@ -313,6 +313,11 @@ For any software, the rule of thumb is to override the configuration by creating
   * `man pulse-daemon.conf`
 
 # History
+
+##### 20181024
+* Mention the source repository
+* Improve the style
+* Create the file *README.md*
 
 ##### 20181007
 * Advise to become root instead of using `sudo`
