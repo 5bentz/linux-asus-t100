@@ -78,11 +78,11 @@ It is time to boot the installation medium!
 #### Run the installer
 - In a terminal, run `ubiquity -b`
 
-Note: The flag `-b` is *necessary* in this tutorial. It tells ubiquity not to install a bootloader. Without this flag, ubiquity would crash when trying to install it (Thanks Steven Andrew Mielke!). The bootloader is installed in the section *Install bootloader* below.
+Note: The flag `-b` is *necessary* in this tutorial. It tells ubiquity not to install a bootloader. Without this flag, ubiquity would crash when trying to install it (Thanks Steven Andrew Mielke!). The bootloader is installed in the section *Bootloader Installation* below.
 
 #### For novice users
 For novice users, follow [Ubuntu's tutorial](https://tutorials.ubuntu.com/tutorial/tutorial-install-ubuntu-desktop#4). But do **not reboot** at the end of the installation. Press the button *Continue testing* instead.
- When you are done with Ubuntu's tutorial, jump to the section *Install bootloader* in this document.
+ When you are done with Ubuntu's tutorial, jump to the section *Bootloader Installation* in this document.
 
 #### For more advanced users
 For more advanced users, choose the last installation type: *Something else*. And jump to the next section *Partitioning*.
@@ -126,9 +126,9 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 - ...Installation...
 - When finished, *Continue testing*
 
-### 7. Install bootloader
+### 7. Bootloader Installation
 - From now onward, we will run the commands as root. To obtain superuser privileges, execute
- * `sudo -s`.
+ * `sudo -s`
 - Do *not* use `sudo` for each command, since it fails with some commands (`for` and `>`).
 
 #### Enable WiFi
@@ -141,11 +141,11 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 
 Now, you should be able to connect your ASUS T100 to your network.
 
-#### Chroot steps
+#### Chroot in the new system
 - Find the EFI System Partition. This should be the VFAT partition next to `/target`
   * `lsblk -f`
 ```
-lsblk -f
+$ lsblk -f
 NAME         FSTYPE   LABEL       UUID                  MOUNTPOINT
 loop0        squashfs                                   /rofs
 sda
@@ -163,7 +163,7 @@ mmcblk0
   * In this example, it is `mmcblk2p1`
   * If you are unsure, check its size with `lsblk`, it should be about 100M.
 - `mount /dev/mmcblk2p1 /target/boot/efi`
-- Then, we have to mount some filesystems before chrooting:
+- Then, we have to mount some other filesystems before chrooting:
 ```
 for dir in /dev /dev/pts /proc /run /sys;
   do mount --bind "$dir" /target/"$dir";
@@ -171,14 +171,15 @@ done
 ```
 - `chroot /target /bin/bash`
 
-#### Bootloader Installation
-- `apt update`
-- `apt install grub-efi-ia32 # grub-pc removed is normal behavior`
-- `grub-install --efi-directory /boot/efi`
-- `update-grub`
-
-- Check `efibootmgr` to see if `ubuntu` is in *BootCurrent* and first in *BootOrder*, as shown below:
+#### Install the Bootloader
+- Install grub for EFI-IA32 architecture, and update its config file
+  * `apt update`
+  * `apt install grub-efi-ia32` #grub-pc removed is normal behavior
+  * `grub-install --efi-directory /boot/efi`
+  * `update-grub`
+- Run `efibootmgr` to see if `ubuntu` is in *BootCurrent* and if it is first in *BootOrder*, as shown below:
 ```
+$ efibootmgr
  BootCurrent: 0001
  Timeout: 1 seconds
  BootOrder: 0001,0002
@@ -187,9 +188,11 @@ done
 ```
 
 ### 8. Boot options
+- Boot options must be edited in the file `/etc/default/grub`
+  * `nano /etc/default/grub`
+
 #### Power saving
 - Edit kernel boot options to add `intel_idle.max_cstate=1` before `quiet`
-  * `nano /etc/default/grub`
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="intel_idle.max_cstate=1 quiet splash"
 ```
@@ -215,13 +218,13 @@ GRUB_TIMEOUT=1
 - Download the following folder
   * https://drive.google.com/drive/folders/0B4DiU2o72FbuOXdwRXhfZ3ZmOFE?tid=0B9C1WK1FQhjfcXNrbzN6djQzajg
 - Extract it and enter the folder
-- I'm following the instructions from the file README.txt
-
-- `sudo rm /var/lib/alsa/asound.state`
-- `sudo mkdir /usr/share/alsa/ucm/bytcr-rt5640`
-- `sudo cp HiFi bytcr-rt5640.conf /usr/share/alsa/ucm/bytcr-rt5640`
+- Follow the instructions from the file README.txt
+  * `sudo rm /var/lib/alsa/asound.state`
+  * `sudo mkdir /usr/share/alsa/ucm/bytcr-rt5640`
+  * `sudo cp HiFi bytcr-rt5640.conf /usr/share/alsa/ucm/bytcr-rt5640`
+- Verify the file are correctly installed, as shown below
 ```
-ll /usr/share/alsa/ucm/bytcr-rt5640
+$ ll /usr/share/alsa/ucm/bytcr-rt5640
 total 16
 -rw-r--r-- 1 root root 8552 Aug  1 21:35 HiFi
 -rw-r--r-- 1 root root  118 Aug  1 21:35 bytcr-rt5640.conf
@@ -229,7 +232,7 @@ total 16
 - `sudo alsactl restore`
   * We have sound devices in Pulseaudio now :3 But still no sound.
   * Lower the sound volume, just in case.
-- reboot
+- Reboot
   * a new asound file is generated (created before or after reboot), but still no sound
 - `sudo cp kernel4.5.xand4.4.x.asound.state /var/lib/alsa/asound.state`
 - `sudo alsactl restore`
@@ -248,7 +251,7 @@ If you have no sound, make sure Pulseaudio is correctly set:
 If you still have no sound, see the troubleshooting section *No Sound* at the end of this document.
 
 ### 11. Backlit control
-Use xbacklight. Working for kernel >= 4.13 (Ubuntu 1804 has 4.15)
+Use xbacklight. Working for kernel >= 4.13 (Ubuntu 1804 has kernel 4.15)
 - `xbacklight -inc 1` and `xbacklight -dec 1`
 - xbacklight requires to configure Xorg: `/etc/X11/xorg.conf`
 ```
@@ -260,11 +263,11 @@ EndSection
 ```
 
 ### 12. Hardware video decoding
+With hardware video decoding, a video player should use around 25% CPU when playing a 720p, h264 video fullscreen, instead of 70-100% without hardware decoding.
 - `apt install ubuntu-restricted-addons`
 - `reboot`
 - `apt install vainfo`
   * `vainfo`
-- Parole should use around 25% CPU when playing a 720p, h264 video fullscreen, instead of 70-100% without hardware decoding.
 
 ### 13. Disable numlock at boot
 - Numlock is especially annoying in the login screen, when typing the password...since we do not see the actual characters.
@@ -273,8 +276,8 @@ EndSection
 ### 14. Bluetooth
 /!\ Same warning as Sound and WiFi, the following file is for T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) have other Bluetooth device numbers.
 
-Bluetooth should already partially work. For a better support, e.g. *bonding*, we need `BCM4324B3.hcd` firmware file in the folder `/lib/firmware/brcm/`.
-- This file can be found in Windows partition, in the folder `C:\Windows\system32\drivers`.
+Bluetooth should already partially work. For a better support, e.g. *pairing* and *bonding*, we need the firmware file `BCM4324B3.hcd` in the folder `/lib/firmware/brcm/`.
+- This file can be found in Windows' partition, in the folder `C:\Windows\system32\drivers`.
 - Or, download it from: https://launchpad.net/asust100-ubuntu/+milestone/bluetooth-t100ta
 - Install it
   * `mv BCM4324B3.hcd /lib/firmware/brcm/`
