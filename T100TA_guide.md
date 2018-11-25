@@ -180,6 +180,18 @@ done
   * `chroot /target /bin/bash`
 
 #### Install the Bootloader
+- Verify that `/dev` `/dev/pts` `/proc` `/run` `/sys` and `/boot/efi` are mounted
+  * `findmnt`
+```
+TARGET
+/
+├─/dev
+│ └─/dev/pts
+├─/proc
+├─/run
+├─/sys
+└─/boot/efi
+```
 - Install grub for EFI-IA32 architecture, and update its config file
   * `apt update`
   * `apt install grub-efi-ia32` #grub-pc removed is normal behavior
