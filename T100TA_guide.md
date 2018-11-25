@@ -330,6 +330,12 @@ For any software, the rule of thumb is to override the configuration by creating
 - For more information
   * `man pulse-daemon.conf`
 
+#### Solution B: Disable sound over HDMI
+- Obtain superuser privilege (root)
+  * `sudo -s`
+- `echo 'blacklist snd_hdmi_lpe_audio' > /etc/modprobe.d/fix_audio.conf`
+- Reboot
+
 # History
 
 ##### 20181024
