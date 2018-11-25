@@ -336,6 +336,9 @@ For any software, the rule of thumb is to override the configuration by creating
 - `echo 'blacklist snd_hdmi_lpe_audio' > /etc/modprobe.d/fix_audio.conf`
 - Reboot
 
+### 3. T100TAM Touchscreen
+Add these kernel command-line parameters: `tsc=reliable clocksource=tsc`
+
 # History
 
 ##### 20181024
