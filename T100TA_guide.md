@@ -2,7 +2,7 @@
 
 # Installing Ubuntu on ASUS T100 TA
 
-As of October 2018. (20181024)
+As of November 2018. (20181125)
 
 John Brodie said
 > The problem with step by step guides. The information is only accurate for up to a few months.
@@ -340,6 +340,13 @@ For any software, the rule of thumb is to override the configuration by creating
 Add these kernel command-line parameters: `tsc=reliable clocksource=tsc`
 
 # History
+
+##### 20181125
+* Verify the mounts before installing bootloader
+* Add an audio fix: Disable sound over HDMI
+* Add a fix for T100TAM Touchscreen
+* C-state >= 2 is not stable
+* Minor changes
 
 ##### 20181024
 * Mention the source repository
