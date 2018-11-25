@@ -18,6 +18,7 @@ Contribute to the guide here: https://github.com/5bentz/linux-asus-t100
 - Asus T100 Ubuntu group. Ask your questions here! https://plus.google.com/communities/117853703024346186936
 - Various tutorials with screenshots https://tutorials.ubuntu.com/tutorial/
 - Linuxium and Isorespin: customize Ubuntu ISOs! https://linuxiumcomau.blogspot.com/2017/06/customizing-ubuntu-isos-documentation.html
+- (2016) Guide for the T100 Ubuntu 16.04: https://drive.google.com/drive/folders/0B4s5KNXf2Z36QW9acnY4RXd3bW8
 
 ### Other sources that made this guide possible
 - (old) Latest steps to install Ubuntu on the Asus T100TA: http://www.jfwhome.com/2016/01/04/latest-steps-to-install-ubuntu-on-the-asus-t100ta/
@@ -137,6 +138,8 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 #### Enable WiFi
 /!\ Theses filenames are for T100TA and T100CHI only. Other T100's (T100TAF and 100H\*) have other brcmfmac numbers. See the troubleshooting section *No WiFi* at the end of this document.
 
+/!\ The filename ends with **sdio.txt**. Do not overwrite the file ending with **sdio.bin**.
+
 - `cp /sys/firmware/efi/efivars/nvram-* /lib/firmware/brcm/brcmfmac43241b4-sdio.txt` #useful now
 - `cp /sys/firmware/efi/efivars/nvram-* /target/lib/firmware/brcm/brcmfmac43241b4-sdio.txt` #useful after reboot
 - `modprobe -r brcmfmac`
@@ -146,6 +149,8 @@ Now, you should be able to connect your ASUS T100 to your network.
 
 #### Chroot in the new system
 - Find the EFI System Partition. This should be the VFAT partition next to `/target`
+  * In the example below, it is `mmcblk2p1`
+  * If you are unsure, check its size with `lsblk`, it should be about 100M.
   * `lsblk -f`
 ```
 $ lsblk -f
@@ -163,16 +168,16 @@ mmcblk2boot1
 mmcblk0
 └─mmcblk0p1  vfat                 9016-4EF8             /media/xubuntu/9016-4EF8
 ```
-  * In this example, it is `mmcblk2p1`
-  * If you are unsure, check its size with `lsblk`, it should be about 100M.
-- `mount /dev/mmcblk2p1 /target/boot/efi`
+- Mount the EFI System Partition on the new system
+  * `mount /dev/mmcblk2p1 /target/boot/efi`
 - Then, we have to mount some other filesystems before chrooting:
 ```
 for dir in /dev /dev/pts /proc /run /sys;
   do mount --bind "$dir" /target/"$dir";
 done
 ```
-- `chroot /target /bin/bash`
+- Here we go!
+  * `chroot /target /bin/bash`
 
 #### Install the Bootloader
 - Install grub for EFI-IA32 architecture, and update its config file
@@ -195,7 +200,7 @@ $ efibootmgr
   * `nano /etc/default/grub`
 
 #### Power saving
-- Edit kernel boot options to add `intel_idle.max_cstate=1` before `quiet`
+- Edit kernel command-line parameters to add `intel_idle.max_cstate=1` before `quiet`
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="intel_idle.max_cstate=1 quiet splash"
 ```
@@ -211,15 +216,16 @@ GRUB_TIMEOUT=1
 - Update the grub configuration file in `/boot/efi/grub/grub.cfg`
   * `update-grub`
 
-### 9. Feel free to do other things in the chroot environment
+### 9. Feel free to do other things in the chroot environment, then reboot
 - When you are done. Just execute `exit`.
 - Before the reboot
   * `umount /target/boot/efi`
+- Reboot on the new system.
 
 ### 10. Sound
-/!\ T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) has other audio device numbers. You may find files for your device on the [Asus T100 group drive](https://drive.google.com/drive/folders/0B4s5KNXf2Z36VVJDQnY5NEltdmc?tid=0B9C1WK1FQhjfcXNrbzN6djQzajg).
+/!\ T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) has other audio device numbers. You will find files for your device on the [Asus T100 group drive](https://drive.google.com/drive/folders/0B4s5KNXf2Z36VVJDQnY5NEltdmc).
 - Download the following folder
-  * https://drive.google.com/drive/folders/0B4DiU2o72FbuOXdwRXhfZ3ZmOFE?tid=0B9C1WK1FQhjfcXNrbzN6djQzajg
+  * https://drive.google.com/drive/folders/0B4DiU2o72FbuOXdwRXhfZ3ZmOFE
 - Extract it and enter the folder
 - Follow the instructions from the file README.txt
   * `sudo rm /var/lib/alsa/asound.state`
