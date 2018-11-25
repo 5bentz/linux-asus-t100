@@ -217,7 +217,7 @@ $ efibootmgr
 GRUB_CMDLINE_LINUX_DEFAULT="intel_idle.max_cstate=1 quiet splash"
 ```
 - cstate <= 1 is STABLE in 2018.
-- I don't know if cstate >= 2 is stable.
+- cstate >= 2 is NOT stable.
 
 #### GRUB boot screen
 - If you want the system to boot faster, let's say 1 second after the GRUB boot screen
