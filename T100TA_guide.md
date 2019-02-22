@@ -2,7 +2,7 @@
 
 # Installing Ubuntu on ASUS T100 TA
 
-As of November 2018. (20181125)
+As of February 2019. (20190221)
 
 John Brodie said
 > The problem with step by step guides. The information is only accurate for up to a few months.
@@ -148,7 +148,7 @@ Note: Alternatively, if you know what you are doing, you can create a new partit
 Now, you should be able to connect your ASUS T100 to your network.
 
 #### Chroot in the new system
-- Find the EFI System Partition. This should be the VFAT partition next to `/target`
+- Find the EFI System Partition. This should be the VFAT partition next to the EXT4 partition
   * In the example below, it is `mmcblk2p1`
   * If you are unsure, check its size with `lsblk`, it should be about 100M.
   * `lsblk -f`
@@ -168,12 +168,14 @@ mmcblk2boot1
 mmcblk0
 └─mmcblk0p1  vfat                 9016-4EF8             /media/xubuntu/9016-4EF8
 ```
+- If your ext4 partition is not mounted, you must do it
+  * `mount /dev/mmcblk2p2 /target`
 - Mount the EFI System Partition on the new system
   * `mount /dev/mmcblk2p1 /target/boot/efi`
 - Then, we have to mount some other filesystems before chrooting:
 ```
 for dir in /dev /dev/pts /proc /run /sys;
-  do mount --bind "$dir" /target/"$dir";
+  do mount --bind "$dir" /target"$dir";
 done
 ```
 - Here we go!
@@ -297,6 +299,8 @@ With hardware video decoding, a video player should use around 25% CPU when play
 ### 14. Bluetooth
 /!\ Same warning as Sound and WiFi, the following file is for T100TA and T100CHI only. Other T100's (T100TAF and T100H\*) have other Bluetooth device numbers.
 
+/!\ On T100CHI, to get keyboard working, boot with docking off and after boot you can switch on, wait it stop blinking and redo a swipe to right with this switch for pairing
+
 Bluetooth should already partially work. For a better support, e.g. *pairing* and *bonding*, we need the firmware file `BCM4324B3.hcd` in the folder `/lib/firmware/brcm/`.
 - This file can be found in Windows' partition, in the folder `C:\Windows\system32\drivers`.
 - Or, download it from: https://launchpad.net/asust100-ubuntu/+milestone/bluetooth-t100ta
@@ -341,6 +345,10 @@ Add these kernel command-line parameters: `tsc=reliable clocksource=tsc`
 
 # History
 
+##### 20190221
+* Improve mount advices before chrooting
+* Add T100CHI keyboard pairing advices
+
 ##### 20181125
 * Verify the mounts before installing bootloader
 * Add an audio fix: Disable sound over HDMI
@@ -365,3 +373,4 @@ Add these kernel command-line parameters: `tsc=reliable clocksource=tsc`
 
 ##### 20180802
 First version
+
