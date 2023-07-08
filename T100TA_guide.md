@@ -339,7 +339,26 @@ For any software, the rule of thumb is to override the configuration by creating
 ### 3. T100TAM Touchscreen
 Add these kernel command-line parameters: `tsc=reliable clocksource=tsc`
 
+### 4. T100TA does not always boot
+Sometimes after loading GRUB, the system gets struck with the last message being `Loading initial ramdisk ...`.
+Usually this happens after a reboot. And most of the time, the second boot then works. But sometimes you have to try many times without success.
+All the suggestions which can be found on the internet like adding `GRUB_CMDLINE_LINUX_DEFAULT=debug --verbose initcall_debug eralycon=efifb` in `/etc/default/grub` to do not produce any additional output when its not booting.
+
+One first workaround is to install memtest86+, then first boot into the memtest, wait 3 seconds, reboot and then boot into Linux.
+
+One better workaround seems to work:
+- Edit `/etc/default/grub`
+  * Enable the line `GRUB_TERMINAL=console`
+  * Call `update-grub`
+
+After this there will be the new message `Trying to terminate efi services again` and the system seems to boot and reboot every time successfully.
+
+
 # History
+
+
+##### 20230708
+* Add GRUB not booting Linux solution
 
 ##### 20181125
 * Verify the mounts before installing bootloader
